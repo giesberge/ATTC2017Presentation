@@ -1,0 +1,667 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Speed Through The Water</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+		
+		<!-- Theme used for syntax highlighting of code -->
+		<!-- <link rel="stylesheet" href="lib/css/zenburn.css"> -->
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h2>Measurement of Speed Through Water</h2>
+					<h3>Eric Giesberg</h3>
+					<p>
+					NSWCCD, Bethesda, Maryland, USA<br>
+					Eric.Giesberg@navy.mil
+					<small>This brief is provided for information only and does not constitute a commitment on behalf of the U.S. government to provide additional information on the program and/or sale of the equipment or system</small>
+					</p>
+				</section>
+				<section>
+					<h2>Introduction</h2>
+					<p>
+					Isolation of the ship's performance from its environment is critical for any comparison of ship performance.
+					<dl>
+						<dt>Current</dt>
+							<dd class="fragment" data-fragment-index="1">
+								-Radially Symmetric Force
+							</dd>
+						<dt>Wind/Waves</dt>
+							<dd class="fragment" data-fragment-index="2">
+								-Can be mitigated by only testing during 'calm' conditions<br>
+								-Can be subtracted based on modeling using measured instruments
+							</dd>
+					</dl>
+					</p>
+				</section>
+				<section>
+					<h2>Basic Theory and Nomenclature</h2>
+					<ul>
+					<li>$V_F$ - Forward Velocity of the Ship Through The Water</li>
+					<li>$V_L$ - Lateral Velocity of the ship through the water</li>
+					<li>$D_Y$ - Drift in Northings Direction</li>
+					<li>$D_X$ - Drift in Eastings Direction</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Basic Theory and Nomenclature (cont)</h2>
+					<p>
+						Drift is a function that varies continually across<br> space ($x,y$) and time($t$)
+						<ul>
+						<li>$D_Y = f(t,x,y)$</li>
+						<li>$D_X = f(t,x,y)$</li>
+						</ul><br>
+						The heading $\theta$ can be used to transfer the current vectors into the ship's reference frame
+						<ul>
+						<li> $D_F = D_Y\sin\theta - D_X \cos\theta$ </li>
+						<li> $D_L = D_Y\cos\theta + D_X \sin\theta$ </li>
+						</ul><br>
+					</p>
+				</section>
+				<section>
+					<h2>Basic Theory and Nomenclature (cont)</h2>
+					<p>
+						When added to the ship's speed through the water the ship's speed over ground is given
+						<ul>
+						<li>$V_F = V_F + D_F$</li>
+						<li>$V_L = V_L + D_L$</li>
+						</ul><br>
+					</p>
+				</section>
+				<section>
+					<h2>Measurement (Instruments)</h2>
+					<p>
+						<small>Recently a ship was operated off the coast of San Diego equipped with various instruments for measuring the speed through the water.
+						
+						<dl>
+						<dt>EM Log</dt>
+							<dd>A Digital Electro Magnetic Log is currently installed and is the defacto standard for measuring speed through the water.</dd>
+						<dt>ADCP</dt>
+							<dd> A Teledyne ADCP operating at 1200 kHz was mounted in the forward third of the ship adjacent to the EMLog </dd>
+						<dl>
+						</small>
+						<img src='images/ADCP.jpg'>
+					</p>
+				</section>
+				<section>
+					<h2>Comprehensive Calculation</h2>
+					<p>
+						When only using GPS, varying courses at constant conditions can be used to generate data necessary to solve for $V_F$ and $V_L$ <br>
+						$\sum_{t=0}^n \left(V_F' - V_F - D_F\right)^2 + \left(V_L' - V_L - D_L\right)^2$
+					</p>
+				</section>
+				<section>
+					<h2>Comprehensive Calculation (cont)</h2>
+					<p>
+						If the currents are assumed to only be varying with time a function can be used like a polynomial <br>
+						$D_Y = at+c$<br>
+						$D_X = bt+d $<br>
+						If substituted in, the minimization problem becomes
+						$\sum_{t=0}^n 
+						\begin{array}{l}
+						\left(V_F' - V_F- (at+c)\sin{\theta} + 	(bt+d)\cos{\theta}\right)^2 +\\ 
+						\left(V_L' - V_L - (at+c)\cos{\theta} - 	(bt+d)\sin{\theta}\right)^2
+						\end{array}
+						$
+					</p>
+				</section>
+				<section>
+					<h2>Comprehensive Calculation Error</h2>
+					<p>
+						'stationary bootstrap' is used <br>
+						A type of block bootstrap that reduces issues with block size selection.<br>
+						In conjunction with random sampling from instrument uncertainty can generate error
+					</p>
+				</section>
+				<section>
+					<h2>Simplified/Classic Calculation</h2>
+					<p>
+						If the following assumptions are made the comprehensive method can be simplified:
+						<ul>
+							<li>Each pass can be described by a single velocity forward </li>
+							<li>Each pass is perfectly reciprocal ($180^\circ$) to the previous pass</li>
+							<li>The time between and the duration of each pass is the same</li>
+						</ul>
+					</p>
+				</section>
+				<section>
+					<h2>Simplified/Classic Calculation</h2>
+					<p>
+						Derivation is in the paper
+						<ul>
+							<li>Two Pass<br>
+							$V = \dfrac{V_1 + V_2}{2}$
+							</li>
+							<li>Three Pass <br>
+							$V = \dfrac{V_1 + 2V_2 + V_3}{4}$
+							</li>
+						</ul>
+					</p>
+				</section>
+				<section>
+					<h2>HF Radar </h2>
+					High Frequency radar system measure speed and direction of ocean surface currents from the shore
+					<img height=400 src="images/HFRadar.png">
+				</section>
+				
+				<section>
+					<h2>Comparison</h2>
+					There is no <nobr class='fragment strike' data-fragment-index="1">ground</nobr> truth <br>
+					<p class="fragment" data-fragment-index="2">water </p>
+				</section>
+				
+				<section>
+					<h2>Average Absolute Bias </h2>
+					<p style="font-size:11px">
+					<table border=0 cellpadding=0 cellspacing=0 style="font-size:20px; color:#000000">
+					 <tr style="color:#FFFFFF">
+					  <td></td>
+					  <td>ADCP Cell 1</td>
+					  <td>ADCP Cell 2</td>
+					  <td>ADCP Cell 3</td>
+					  <td>ADCP Cell 4</td>
+					  <td>ADCP Cell 5</td>
+					  <td>ADCP Cell 6</td>
+					  <td>EMLog</td>
+					  <td>Simplified</td>
+					  <td>Comprehensive</td>
+					  <td>HFRadar</td>
+					 </tr>
+					 <tr>
+					  <td style="color:#FFFFFF">ADCP Cell 1</td>
+					  <td style='background:#63BE7B'>0.000</td>
+					  <td style='background:#FB9B75'>0.293</td>
+					  <td style='background:#FB9874'>0.298</td>
+					  <td style='background:#FBA176'>0.280</td>
+					  <td style='background:#FCAC78'>0.257</td>
+					  <td style='background:#FCAF79'>0.249</td>
+					  <td style='background:#FFDE82'>0.150</td>
+					  <td style='background:#FECB7E'>0.191</td>
+					  <td style='background:#FFD981'>0.160</td>
+					  <td style='background:#FECB7E'>0.191</td>
+					 </tr>
+					 <tr>
+					  <td style="color:#FFFFFF">ADCP Cell 2</td>
+					  <td style='background:#FB9B75'>0.293</td>
+					  <td style='background:#63BE7B'>0.000</td>
+					  <td style='background:#8CC97D'>0.032</td>
+					  <td style='background:#A5D17E'>0.052</td>
+					  <td style='background:#D2DE81'>0.088</td>
+					  <td style='background:#ECE582'>0.108</td>
+					  <td style='background:#F96B6C'>0.393</td>
+					  <td style='background:#FFDC82'>0.154</td>
+					  <td style='background:#FFE483'>0.138</td>
+					  <td style='background:#FFDD82'>0.152</td>
+					 </tr>
+					 <tr>
+					  <td style="color:#FFFFFF">ADCP Cell 3</td>
+					  <td style='background:#FB9874'>0.298</td>
+					  <td style='background:#8CC97D'>0.032</td>
+					  <td style='background:#63BE7B'>0.000</td>
+					  <td style='background:#85C77C'>0.027</td>
+					  <td style='background:#B3D57F'>0.063</td>
+					  <td style='background:#CEDD81'>0.085</td>
+					  <td style='background:#F8696B'>0.396</td>
+					  <td style='background:#FFDE82'>0.151</td>
+					  <td style='background:#FFE683'>0.134</td>
+					  <td style='background:#FFDF82'>0.148</td>
+					 </tr>
+					 <tr>
+					  <td style="color:#FFFFFF">ADCP Cell 4</td>
+					  <td style='background:#FBA176'>0.280</td>
+					  <td style='background:#A5D17E'>0.052</td>
+					  <td style='background:#85C77C'>0.027</td>
+					  <td style='background:#63BE7B'>0.000</td>
+					  <td style='background:#92CB7D'>0.037</td>
+					  <td style='background:#AED37F'>0.059</td>
+					  <td style='background:#F9736D'>0.376</td>
+					  <td style='background:#FFE583'>0.135</td>
+					  <td style='background:#F1E783'>0.111</td>
+					  <td style='background:#FFE784'>0.133</td>
+					 </tr>
+					 <tr>
+					  <td style="color:#FFFFFF">ADCP Cell 5</td>
+					  <td style='background:#FCAC78'>0.257</td>
+					  <td style='background:#D2DE81'>0.088</td>
+					  <td style='background:#B3D57F'>0.063</td>
+					  <td style='background:#92CB7D'>0.037</td>
+					  <td style='background:#63BE7B'>0.000</td>
+					  <td style='background:#80C67C'>0.023</td>
+					  <td style='background:#FA7E6F'>0.353</td>
+					  <td style='background:#E9E482'>0.105</td>
+					  <td style='background:#C8DB80'>0.079</td>
+					  <td style='background:#F1E783'>0.112</td>
+					 </tr>
+					 <tr>
+					  <td style="color:#FFFFFF">ADCP Cell 6</td>
+					  <td style='background:#FCAF79'>0.249</td>
+					  <td style='background:#ECE582'>0.108</td>
+					  <td style='background:#CEDD81'>0.085</td>
+					  <td style='background:#AED37F'>0.059</td>
+					  <td style='background:#80C67C'>0.023</td>
+					  <td style='background:#63BE7B'>0.000</td>
+					  <td style='background:#FA8270'>0.345</td>
+					  <td style='background:#D9E081'>0.093</td>
+					  <td style='background:#B6D67F'>0.066</td>
+					  <td style='background:#EAE582'>0.106</td>
+					 </tr>
+					 <tr>
+					  <td style="color:#FFFFFF">EMLog</td>
+					  <td style='background:#FFDE82'>0.150</td>
+					  <td style='background:#F96B6C'>0.393</td>
+					  <td style='background:#F8696B'>0.396</td>
+					  <td style='background:#F9736D'>0.376</td>
+					  <td style='background:#FA7E6F'>0.353</td>
+					  <td style='background:#FA8270'>0.345</td>
+					  <td style='background:#63BE7B'>0.000</td>
+					  <td style='background:#FB9173'>0.312</td>
+					  <td style='background:#FB9B75'>0.292</td>
+					  <td style='background:#FCA477'>0.273</td>
+					 </tr>
+					 <tr>
+					  <td style="color:#FFFFFF">Simplified</td>
+					  <td style='background:#FECB7E'>0.191</td>
+					  <td style='background:#FFDC82'>0.154</td>
+					  <td style='background:#FFDE82'>0.151</td>
+					  <td style='background:#FFE583'>0.135</td>
+					  <td style='background:#E9E482'>0.105</td>
+					  <td style='background:#D9E081'>0.093</td>
+					  <td style='background:#FB9173'>0.312</td>
+					  <td style='background:#63BE7B'>0.000</td>
+					  <td style='background:#84C77C'>0.026</td>
+					  <td style='background:#75C37C'>0.014</td>
+					 </tr>
+					 <tr>
+					  <td style="color:#FFFFFF">Comprehensive</td>
+					  <td style='background:#FFD981'>0.160</td>
+					  <td style='background:#FFE483'>0.138</td>
+					  <td style='background:#FFE683'>0.134</td>
+					  <td style='background:#F1E783'>0.111</td>
+					  <td style='background:#C8DB80'>0.079</td>
+					  <td style='background:#B6D67F'>0.066</td>
+					  <td style='background:#FB9B75'>0.292</td>
+					  <td style='background:#84C77C'>0.026</td>
+					  <td style='background:#63BE7B'>0.000</td>
+					  <td style='background:#84C77C'>0.026</td>
+					 </tr>
+					 <tr>
+					  <td style="color:#FFFFFF">HFRadar</td>
+					  <td style='background:#FECB7E'>0.191</td>
+					  <td style='background:#FFDD82'>0.152</td>
+					  <td style='background:#FFDF82'>0.148</td>
+					  <td style='background:#FFE784'>0.133</td>
+					  <td style='background:#F1E783'>0.112</td>
+					  <td style='background:#EAE582'>0.106</td>
+					  <td style='background:#FCA477'>0.273</td>
+					  <td style='background:#75C37C'>0.014</td>
+					  <td style='background:#84C77C'>0.026</td>
+					  <td style='background:#63BE7B'>0.000</td>
+					 </tr>
+					</table>
+				</section>
+				
+				<section>
+					<h2>Correlation</h2>
+					<p style="font-size:11px">
+					<table border=0 cellpadding=0 cellspacing=0 style="font-size:20px; color:#000000">
+					 <tr style="color:#FFFFFF">
+					  <td></td>
+					  <td>ADCP Cell 1</td>
+					  <td>ADCP Cell 2</td>
+					  <td>ADCP Cell 3</td>
+					  <td>ADCP Cell 4</td>
+					  <td>ADCP Cell 5</td>
+					  <td>ADCP Cell 6</td>
+					  <td>EMLog</td>
+					  <td>Simplified</td>
+					  <td>Comprehensive</td>
+					  <td>HFRadar</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 1</td>
+					  <td style='background:#64BF7C'>1.000</td>
+					  <td style='background:#FEDF81'>0.968</td>
+					  <td style='background:#FDCF7E'>0.954</td>
+					  <td style='background:#FDC87D'>0.948</td>
+					  <td style='background:#FCBA7A'>0.937</td>
+					  <td style='background:#FBAF78'>0.928</td>
+					  <td style='background:#FEDC81'>0.965</td>
+					  <td style='background:#FBB379'>0.931</td>
+					  <td style='background:#FCC27C'>0.944</td>
+					  <td style='background:#F8696B'>0.870</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 2</td>
+					  <td style='background:#FEDF81'>0.968</td>
+					  <td style='background:#63BE7B'>1.000</td>
+					  <td style='background:#78C47D'>0.997</td>
+					  <td style='background:#91CB7E'>0.993</td>
+					  <td style='background:#C8DC81'>0.985</td>
+					  <td style='background:#F7E984'>0.978</td>
+					  <td style='background:#D7E082'>0.983</td>
+					  <td style='background:#FDD07E'>0.955</td>
+					  <td style='background:#FED880'>0.962</td>
+					  <td style='background:#FDCA7D'>0.951</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 3</td>
+					  <td style='background:#FDCF7E'>0.954</td>
+					  <td style='background:#78C47D'>0.997</td>
+					  <td style='background:#63BE7B'>1.000</td>
+					  <td style='background:#6AC07C'>0.999</td>
+					  <td style='background:#89C97E'>0.994</td>
+					  <td style='background:#AAD380'>0.990</td>
+					  <td style='background:#FEE382'>0.971</td>
+					  <td style='background:#FEE582'>0.972</td>
+					  <td style='background:#FEE983'>0.976</td>
+					  <td style='background:#FDD680'>0.960</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 4</td>
+					  <td style='background:#FDC87D'>0.948</td>
+					  <td style='background:#91CB7E'>0.993</td>
+					  <td style='background:#6AC07C'>0.999</td>
+					  <td style='background:#64BF7C'>1.000</td>
+					  <td style='background:#72C37C'>0.998</td>
+					  <td style='background:#89C97E'>0.994</td>
+					  <td style='background:#FEDA80'>0.964</td>
+					  <td style='background:#F7E984'>0.978</td>
+					  <td style='background:#E6E483'>0.981</td>
+					  <td style='background:#FED980'>0.963</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 5</td>
+					  <td style='background:#FCBA7A'>0.937</td>
+					  <td style='background:#C8DC81'>0.985</td>
+					  <td style='background:#89C97E'>0.994</td>
+					  <td style='background:#72C37C'>0.998</td>
+					  <td style='background:#63BE7B'>1.000</td>
+					  <td style='background:#6BC17C'>0.999</td>
+					  <td style='background:#FDCA7D'>0.951</td>
+					  <td style='background:#B3D580'>0.988</td>
+					  <td style='background:#AED480'>0.989</td>
+					  <td style='background:#FEDB81'>0.965</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 6</td>
+					  <td style='background:#FBAF78'>0.928</td>
+					  <td style='background:#F7E984'>0.978</td>
+					  <td style='background:#AAD380'>0.990</td>
+					  <td style='background:#89C97E'>0.994</td>
+					  <td style='background:#6BC17C'>0.999</td>
+					  <td style='background:#63BE7B'>1.000</td>
+					  <td style='background:#FCBF7B'>0.941</td>
+					  <td style='background:#A0D07F'>0.991</td>
+					  <td style='background:#9DCF7F'>0.991</td>
+					  <td style='background:#FDD780'>0.961</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>EMLog</td>
+					  <td style='background:#FEDC81'>0.965</td>
+					  <td style='background:#D7E082'>0.983</td>
+					  <td style='background:#FEE382'>0.971</td>
+					  <td style='background:#FEDA80'>0.964</td>
+					  <td style='background:#FDCA7D'>0.951</td>
+					  <td style='background:#FCBF7B'>0.941</td>
+					  <td style='background:#64BF7C'>1.000</td>
+					  <td style='background:#FBA376'>0.918</td>
+					  <td style='background:#FCB679'>0.934</td>
+					  <td style='background:#FBA777'>0.922</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>Simplified</td>
+					  <td style='background:#FBB379'>0.931</td>
+					  <td style='background:#FDD07E'>0.955</td>
+					  <td style='background:#FEE582'>0.972</td>
+					  <td style='background:#F7E984'>0.978</td>
+					  <td style='background:#B3D580'>0.988</td>
+					  <td style='background:#A0D07F'>0.991</td>
+					  <td style='background:#FBA376'>0.918</td>
+					  <td style='background:#63BE7B'>1.000</td>
+					  <td style='background:#65BF7C'>1.000</td>
+					  <td style='background:#65BF7C'>1.000</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>Comprehensive</td>
+					  <td style='background:#FCC27C'>0.944</td>
+					  <td style='background:#FED880'>0.962</td>
+					  <td style='background:#FEE983'>0.976</td>
+					  <td style='background:#E6E483'>0.981</td>
+					  <td style='background:#AED480'>0.989</td>
+					  <td style='background:#9DCF7F'>0.991</td>
+					  <td style='background:#FCB679'>0.934</td>
+					  <td style='background:#65BF7C'>1.000</td>
+					  <td style='background:#64BF7C'>1.000</td>
+					  <td style='background:#89C97E'>0.994</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>HFRadar</td>
+					  <td style='background:#F8696B'>0.870</td>
+					  <td style='background:#FDCA7D'>0.951</td>
+					  <td style='background:#FDD680'>0.960</td>
+					  <td style='background:#FED980'>0.963</td>
+					  <td style='background:#FEDB81'>0.965</td>
+					  <td style='background:#FDD780'>0.961</td>
+					  <td style='background:#FBA777'>0.922</td>
+					  <td style='background:#65BF7C'>1.000</td>
+					  <td style='background:#89C97E'>0.994</td>
+					  <td style='background:#63BE7B'>1.000</td>
+					 </tr>
+					</table>
+				</section>
+				<section>
+					<h2>Average Unaccounted Difference</h2>
+					<p style="font-size:11px">
+					<table border=0 cellpadding=0 cellspacing=0 style="font-size:20px; color:#000000">
+					 <tr style="color:#FFFFFF">
+					  <td></td>
+					  <td>ADCP Cell 1</td>
+					  <td>ADCP Cell 2</td>
+					  <td>ADCP Cell 3</td>
+					  <td>ADCP Cell 4</td>
+					  <td>ADCP Cell 5</td>
+					  <td>ADCP Cell 6</td>
+					  <td>EMLog</td>
+					  <td>Simplified</td>
+					  <td>Comprehensive</td>
+					  <td>HFRadar</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 1</td>
+					  <td></td>
+					  <td style='background:#FA8471'>0.164</td>
+					  <td style='background:#F9716D'>0.185</td>
+					  <td style='background:#F97C6F'>0.173</td>
+					  <td style='background:#FA8972'>0.158</td>
+					  <td style='background:#FDBE7C'>0.099</td>
+					  <td style='background:#70C17B'>0.004</td>
+					  <td></td>
+					  <td style='background:#FDC67D'>0.091</td>
+					  <td style='background:#FED781'>0.072</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 2</td>
+					  <td style='background:#FA8471'>0.164</td>
+					  <td></td>
+					  <td style='background:#6DC17B'>0.003</td>
+					  <td style='background:#7FC67C'>0.009</td>
+					  <td style='background:#CBDC81'>0.033</td>
+					  <td style='background:#D1DE81'>0.035</td>
+					  <td style='background:#F9776E'>0.178</td>
+					  <td></td>
+					  <td style='background:#FED380'>0.076</td>
+					  <td style='background:#FFE483'>0.057</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 3</td>
+					  <td style='background:#F9716D'>0.185</td>
+					  <td style='background:#6DC17B'>0.003</td>
+					  <td></td>
+					  <td style='background:#65BE7B'>0.001</td>
+					  <td style='background:#9FCF7E'>0.019</td>
+					  <td style='background:#B3D57F'>0.026</td>
+					  <td style='background:#F8696B'>0.193</td>
+					  <td></td>
+					  <td style='background:#FED981'>0.070</td>
+					  <td style='background:#FDEA83'>0.049</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 4</td>
+					  <td style='background:#F97C6F'>0.173</td>
+					  <td style='background:#7FC67C'>0.009</td>
+					  <td style='background:#65BE7B'>0.001</td>
+					  <td></td>
+					  <td style='background:#6BC07B'>0.003</td>
+					  <td style='background:#84C77C'>0.011</td>
+					  <td style='background:#F9746D'>0.181</td>
+					  <td></td>
+					  <td style='background:#FFEB84'>0.050</td>
+					  <td style='background:#E6E382'>0.042</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 5</td>
+					  <td style='background:#FA8972'>0.158</td>
+					  <td style='background:#CBDC81'>0.033</td>
+					  <td style='background:#9FCF7E'>0.019</td>
+					  <td style='background:#6BC07B'>0.003</td>
+					  <td></td>
+					  <td style='background:#64BE7B'>0.000</td>
+					  <td style='background:#FA8270'>0.166</td>
+					  <td></td>
+					  <td style='background:#C0D880'>0.030</td>
+					  <td style='background:#C4DA80'>0.031</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>ADCP Cell 6</td>
+					  <td style='background:#FDBE7C'>0.099</td>
+					  <td style='background:#D1DE81'>0.035</td>
+					  <td style='background:#B3D57F'>0.026</td>
+					  <td style='background:#84C77C'>0.011</td>
+					  <td style='background:#64BE7B'>0.000</td>
+					  <td></td>
+					  <td style='background:#FCB37A'>0.112</td>
+					  <td></td>
+					  <td style='background:#96CC7D'>0.016</td>
+					  <td style='background:#C1D980'>0.030</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>EMLog</td>
+					  <td style='background:#70C17B'>0.004</td>
+					  <td style='background:#F9776E'>0.178</td>
+					  <td style='background:#F8696B'>0.193</td>
+					  <td style='background:#F9746D'>0.181</td>
+					  <td style='background:#FA8270'>0.166</td>
+					  <td style='background:#FCB37A'>0.112</td>
+					  <td></td>
+					  <td></td>
+					  <td style='background:#FCAF79'>0.117</td>
+					  <td style='background:#FED781'>0.072</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>Simplified</td>
+					  <td></td>
+					  <td></td>
+					  <td></td>
+					  <td></td>
+					  <td></td>
+					  <td></td>
+					  <td></td>
+					  <td></td>
+					  <td></td>
+					  <td></td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>Comprehensive</td>
+					  <td style='background:#FDC67D'>0.091</td>
+					  <td style='background:#FED380'>0.076</td>
+					  <td style='background:#FED981'>0.070</td>
+					  <td style='background:#FFEB84'>0.050</td>
+					  <td style='background:#C0D880'>0.030</td>
+					  <td style='background:#96CC7D'>0.016</td>
+					  <td style='background:#FCAF79'>0.117</td>
+					  <td></td>
+					  <td></td>
+					  <td style='background:#63BE7B'>0.000</td>
+					 </tr>
+					 <tr>
+					  <td style='color:#FFFFFF'>HFRadar</td>
+					  <td style='background:#FED781'>0.072</td>
+					  <td style='background:#FFE483'>0.057</td>
+					  <td style='background:#FDEA83'>0.049</td>
+					  <td style='background:#E6E382'>0.042</td>
+					  <td style='background:#C4DA80'>0.031</td>
+					  <td style='background:#C1D980'>0.030</td>
+					  <td style='background:#FED781'>0.072</td>
+					  <td></td>
+					  <td style='background:#63BE7B'>0.000</td>
+					  <td></td>
+					 </tr>
+					</table>
+				</section>
+				<section>
+				<h2>Repeatability</h2>
+<table style='font-size: 10px;'>
+<tr class="header"><th align="right"><strong>Run</strong></th><th align="right"><strong>Hdg</strong></th><th align="right"><strong>Wind</strong></th><th align="right"><strong>Dir</strong></th><th colspan=10><strong>Usage</strong></th></tr>
+<tr>
+<td>A</td><td>-1.5</td><td>7.77</td><td>-62.7</td><td align='center'>$\bullet$</td><td align="center"></td><td align="center"></td><td align="center"></td><td align="center">$\bullet$</td><td align="center"></td><td align="center"></td><td align="center">$\bullet$</td><td align="center"></td><td align="center">$\bullet$</td></tr>
+<tr>
+<td>B</td><td>177.6</td><td>5.28</td><td>-109.0</td><td align='center'></td><td align="center">$\bullet$</td><td align="center"></td><td align="center"></td><td align="center">$\bullet$</td><td align="center">$\bullet$</td><td align="center"></td><td align="center">$\bullet$</td><td align="center">$\bullet$</td><td align="center">$\bullet$</td></tr>
+<tr>
+<td>C</td><td>-61.4</td><td>8.16</td><td>-61.7</td><td align='center'></td><td align="center"></td><td align="center">$\bullet$</td><td align="center"></td><td align="center"></td><td align="center">$\bullet$</td><td align="center">$\bullet$</td><td align="center">$\bullet$</td><td align="center">$\bullet$</td><td align="center">$\bullet$</td></tr>
+<tr>
+<td>D</td><td>58.9</td><td>3.02</td><td>-90.0</td><td align='center'></td><td align="center"></td><td align="center"></td><td align="center">$\bullet$</td><td align="center"></td><td align="center"></td><td align="center">$\bullet$</td><td align="center"></td><td align="center">$\bullet$</td><td align="center">$\bullet$</td></tr>
+<tr><td colspan=4 align='right'><strong>Instrument</strong></td><td colspan=10 align='center'><strong>Measured Speed (kts)</strong></td></tr><tr><td colspan=4 align=right>Classic</td><td></td><td></td><td></td><td></td><td>16.28<br></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=4 align=right>EMLog</td><td>16.01<br>$\pm0.16$</td><td>15.95<br>$\pm0.16$</td><td>15.91<br>$\pm0.16$</td><td>16.14<br>$\pm0.16$</td><td>15.99<br>$\pm0.16$</td><td>15.95<br>$\pm0.16$</td><td>16.04<br>$\pm0.16$</td><td>15.97<br>$\pm0.16$</td><td>16.02<br>$\pm0.16$</td><td>16.02<br>$\pm0.16$</td></tr><tr><td colspan=4 align=right>New</td><td></td><td></td><td></td><td></td><td>16.29<br>$\pm0.03$</td><td>16.33<br>$\pm0.03$</td><td>16.26<br>$\pm0.04$</td><td>16.29<br>$\pm0.03$</td><td>16.32<br>$\pm0.04$</td><td>16.29<br>$\pm0.04$</td></tr><tr><td colspan=4 align=right>HFRadar</td><td>16.36<br>$\pm0.10$</td><td>16.22<br>$\pm0.09$</td><td>16.54<br>$\pm0.04$</td><td>16.17<br>$\pm0.14$</td><td>16.28<br>$\pm0.10$</td><td>16.37<br>$\pm0.07$</td><td>16.34<br>$\pm0.09$</td><td>16.37<br>$\pm0.08$</td><td>16.30<br>$\pm0.09$</td><td>16.32<br>$\pm0.09$</td></tr><tr><td colspan=4 align=right>ADCP Depth Cell 1</td><td>16.17<br>$\pm0.04$</td><td>16.17<br>$\pm0.04$</td><td>16.05<br>$\pm0.04$</td><td>16.27<br>$\pm0.03$</td><td>16.17<br>$\pm0.04$</td><td>16.13<br>$\pm0.04$</td><td>16.18<br>$\pm0.03$</td><td>16.14<br>$\pm0.03$</td><td>16.19<br>$\pm0.03$</td><td>16.18<br>$\pm0.03$</td></tr><tr><td colspan=4 align=right>ADCP Depth Cell 2</td><td>16.41<br>$\pm0.03$</td><td>16.40<br>$\pm0.03$</td><td>16.35<br>$\pm0.02$</td><td>16.55<br>$\pm0.02$</td><td>16.40<br>$\pm0.02$</td><td>16.38<br>$\pm0.02$</td><td>16.47<br>$\pm0.02$</td><td>16.39<br>$\pm0.02$</td><td>16.45<br>$\pm0.02$</td><td>16.44<br>$\pm0.02$</td></tr><tr><td colspan=4 align=right>ADCP Depth Cell 3</td><td>16.42<br>$\pm0.04$</td><td>16.40<br>$\pm0.03$</td><td>16.39<br>$\pm0.03$</td><td>16.56<br>$\pm0.45$</td><td>16.41<br>$\pm0.03$</td><td>16.40<br>$\pm0.02$</td><td>16.49<br>$\pm0.27$</td><td>16.41<br>$\pm0.03$</td><td>16.46<br>$\pm0.02$</td><td>16.45<br>$\pm0.03$</td></tr><tr><td colspan=4 align=right>ADCP Depth Cell 4</td><td>16.39<br>$\pm0.03$</td><td>16.35<br>$\pm0.04$</td><td>16.39<br>$\pm0.02$</td><td>16.54<br>$\pm0.03$</td><td>16.37<br>$\pm0.03$</td><td>16.37<br>$\pm0.03$</td><td>16.48<br>$\pm0.02$</td><td>16.38<br>$\pm0.03$</td><td>16.44<br>$\pm0.03$</td><td>16.43<br>$\pm0.02$</td></tr><tr><td colspan=4 align=right>ADCP Depth Cell 5</td><td>16.39<br>$\pm0.03$</td><td>16.26<br>$\pm0.04$</td><td>16.40<br>$\pm0.03$</td><td>16.48<br>$\pm0.03$</td><td>16.31<br>$\pm0.03$</td><td>16.32<br>$\pm0.03$</td><td>16.45<br>$\pm0.03$</td><td>16.35<br>$\pm0.03$</td><td>16.39<br>$\pm0.03$</td><td>16.39<br>$\pm0.03$</td></tr><tr><td colspan=4 align=right>ADCP Depth Cell 6</td><td>16.41<br>$\pm0.03$</td><td>16.19<br>$\pm0.47$</td><td>16.40<br>$\pm0.03$</td><td>16.42<br>$\pm0.04$</td><td>16.29<br>$\pm0.28$</td><td>16.30<br>$\pm0.33$</td><td>16.41<br>$\pm0.03$</td><td>16.34<br>$\pm0.23$</td><td>16.35<br>$\pm0.22$</td><td>16.36<br>$\pm0.17$</td></tr></table>
+			</section>
+			<section>
+			<h3>Conclusion</h3>
+			</section>
+			<section>
+			<h3>Frequency Effect on Comprehensive Calculation</h3>
+			<img src="images/FreqEffect.png">
+			</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+		
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				math: {
+					mathjax: 'MathJax/MathJax.js',
+					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+				},
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/math/math.js', async: true }
+				]
+			});
+			Reveal.configure({ slideNumber: true });
+			Reveal.configure({ slideNumber: 'c/t' });
+		</script>
+
+	</body>
+</html>
