@@ -88,63 +88,112 @@
 						<img src="images/MeasuredMile.jpg" height="50%" width="50%">
 				</section>
 				<section>
-					<h2>Basic Theory and Nomenclature</h2>
-					<ul>
-					<li>$V_F$ - Forward Velocity of the Ship Through The Water</li>
-					<li>$V_L$ - Lateral Velocity of the ship through the water</li>
-					<li>$D_Y$ - Drift in Northings Direction</li>
-					<li>$D_X$ - Drift in Eastings Direction</li>
-					</ul>
+					<h2>Simple/Classic Calculation</h2>
+					<p>
+						<ul>
+							<li>Two Pass<br>
+							$V = \dfrac{V_1 + V_2}{2}$
+							</li>
+							<li>Three Pass <br>
+							$V = \dfrac{V_1 + 2V_2 + V_3}{4}$
+							</li>
+						</ul>
+					</p>
 				</section>
 				<section>
-					<h2>Basic Theory and Nomenclature (cont)</h2>
+					<h2>Enter GPS and Kalman Filters</h2>
+					<img src="images/GPS_satellite.jpg" height="50%" width="50%">
+				</section>
+				<section>
+					<h2>Simple/Classic Calculation*</h2>
+					<p>
+						<ul>
+							<li>Two Pass<br>
+							$V = \dfrac{V_1 + V_2}{2}$
+							</li>
+							<li>Three Pass <br>
+							$V = \dfrac{V_1 + 2V_2 + V_3}{4}$
+							</li>
+						</ul>
+					</p>
+					<h7 class="fragment" data-fragment-index="1">*With some adjustment for forward and lateral velocities</h7>
+				</section>
+				<section>
+					<h2>Improvement (expansion)</h2>
+					<p>
+						<div align="left">
+						$V = \dfrac{V_1 + 2V_2 + V_3}{4}$ <br>
+						$V_F$ - Forward Velocity of the Ship Through The Water <br>
+						$a,b$ - Coefficients for Drift Velocity<br>
+						$V_1 = V_F - a + b$<br>
+						$V_2 = V_F - b$<br>
+						$V_3 = V_F + a + b$<br>
+						</div>
+					</p>
+					<h7 class="fragment" data-fragment-index="1">*With some adjustment for forward and lateral velocities</h7>
+				</section>
+				<section>
+					<h2>Improvement (addition of time)</h2>
+					<p>
+						<div align="left">
+						$V_1 = V_F + (at + b)$<br>
+						$V_2 = V_F - (at + b)$<br>
+						$V_3 = V_F + (at + b)$<br>
+						</div>
+					</p>
+				</section>
+				<section>
+					<h2>Improvement (remove signs)</h2>
+					<p>
+						<div align="left">
+						$\theta_{\Delta H}$ - Angle Relative to Original Base Heading
+						$V_{STW} = V_F + (at + b)\cos\theta_{\Delta H}$<br>
+						</div>
+					</p>
+				</section>
+				<section>
+					<h2>Improvement (generalize drift function)</h2>
 					<p>
 						Drift is a function that varies continually across<br> space ($x,y$) and time($t$)
-						<ul>
-						<li>$D_Y = f(t,x,y)$</li>
-						<li>$D_X = f(t,x,y)$</li>
-						</ul><br>
+						<div align="left">
+						$D = f(t,x,y)$<br>
+						$V_{STW} = V_F + D\cos\theta_{\Delta H}$<br>
+						</div>
+					</p>
+				</section>
+				<section>
+					<h2>Improvement (Trigonometry)</h2>
+					<p>
+						Drift works in both directions
+						<div align="left">
+						$D_Y$ - Drift in Northings Direction <br>
+						$D_X$ - Drift in Eastings Direction <br>
+						$V_F$ - Forward Velocity of the Ship Through the Water <br>
+						$V_L$ - Lateral Velocity of the Ship Through the Water <br>
+						</div>
 						The heading $\theta$ can be used to transfer the current vectors into the ship's reference frame
-						<ul>
-						<li> $D_F = D_Y\sin\theta - D_X \cos\theta$ </li>
-						<li> $D_L = D_Y\cos\theta + D_X \sin\theta$ </li>
-						</ul><br>
+						<div align="left">
+						$D_F = D_Y\sin\theta - D_X \cos\theta$ <br>
+						$D_L = D_Y\cos\theta + D_X \sin\theta$
+						</div>
 					</p>
 				</section>
 				<section>
-					<h2>Basic Theory and Nomenclature (cont)</h2>
+					<h2>Improvement</h2>
 					<p>
-						When added to the ship's speed through the water the ship's speed over ground is given
-						<ul>
-						<li>$V_F = V_F + D_F$</li>
-						<li>$V_L = V_L + D_L$</li>
-						</ul><br>
-					</p>
-				</section>
-				<section>
-					<h2>Measurement (Instruments)</h2>
-					<p>
-						<small>Recently a ship was operated off the coast of San Diego equipped with various instruments for measuring the speed through the water.
-						
-						<dl>
-						<dt>EM Log</dt>
-							<dd>A Digital Electro Magnetic Log is currently installed and is the defacto standard for measuring speed through the water.</dd>
-						<dt>ADCP</dt>
-							<dd> A Teledyne ADCP operating at 1200 kHz was mounted in the forward third of the ship adjacent to the EMLog </dd>
-						<dl>
-						</small>
-						<img src='images/ADCP.jpg'>
-					</p>
-				</section>
-				<section>
-					<h2>Comprehensive Calculation</h2>
-					<p>
+						<div align="left">
+						$V_F = V_F + D_F$ <br>
+						$V_L = V_L + D_L$
+						</div>
 						When only using GPS, varying courses at constant conditions can be used to generate data necessary to solve for $V_F$ and $V_L$ <br>
+						<div align="left">
 						$\sum_{t=0}^n \left(V_F' - V_F - D_F\right)^2 + \left(V_L' - V_L - D_L\right)^2$
+						</div>
+						This implies the ability to do non-reciprocal speed trials! i.e. 90 degree turns
 					</p>
 				</section>
 				<section>
-					<h2>Comprehensive Calculation (cont)</h2>
+					<h2>Improvement Example (cont)</h2>
 					<p>
 						If the currents are assumed to only be varying with time a function can be used like a polynomial <br>
 						$D_Y = at+c$<br>
@@ -164,12 +213,13 @@
 						'stationary bootstrap' is used <br>
 						A type of block bootstrap that reduces issues with block size selection.<br>
 						In conjunction with random sampling from instrument uncertainty can generate error
+						https://statistics.stanford.edu/sites/default/files/EFS%20NSF%20365.pdf
 					</p>
 				</section>
 				<section>
-					<h2>Simplified/Classic Calculation</h2>
+					<h2>Simple/Classic Calculation</h2>
 					<p>
-						If the following assumptions are made the comprehensive method can be simplified:
+						The following assumptions need to be made:
 						<ul>
 							<li>Each pass can be described by a single velocity forward </li>
 							<li>Each pass is perfectly reciprocal ($180^\circ$) to the previous pass</li>
@@ -178,19 +228,21 @@
 					</p>
 				</section>
 				<section>
-					<h2>Simplified/Classic Calculation</h2>
+					<h2>Measurement (Instruments)</h2>
 					<p>
-						Derivation is in the paper
-						<ul>
-							<li>Two Pass<br>
-							$V = \dfrac{V_1 + V_2}{2}$
-							</li>
-							<li>Three Pass <br>
-							$V = \dfrac{V_1 + 2V_2 + V_3}{4}$
-							</li>
-						</ul>
+						<small>Recently a ship was operated off the coast of San Diego equipped with various instruments for measuring the speed through the water.
+						
+						<dl>
+						<dt>EM Log</dt>
+							<dd>A Digital Electro Magnetic Log is currently installed and is the defacto standard for measuring speed through the water.</dd>
+						<dt>ADCP</dt>
+							<dd> A Teledyne ADCP operating at 1200 kHz was mounted in the forward third of the ship adjacent to the EMLog </dd>
+						<dl>
+						</small>
+						<img src='images/ADCP.jpg'>
 					</p>
 				</section>
+
 				<section>
 					<h2>HF Radar </h2>
 					High Frequency radar system measure speed and direction of ocean surface currents from the shore
@@ -683,7 +735,7 @@
 			Reveal.initialize({
 				history: true,
 				math: {
-					mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js',
 					config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
 				},
 
