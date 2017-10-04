@@ -1,0 +1,15 @@
+body:after {
+content: url(../images/NAVSEA_logo.jpg);
+transform: scale(.2);
+transform-origin: right top;
+position: fixed;
+top: 0;
+right: 0;}
+
+.header {
+content: url(../images/ATTCLogo.png);
+transform: scale(.4);
+transform-origin: left top;
+position: fixed;
+top: 0;
+left: 0;}
